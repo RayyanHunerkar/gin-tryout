@@ -1,0 +1,166 @@
+basePath: /
+definitions:
+  books.AddBooksRequestBody:
+    properties:
+      author:
+        type: string
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  books.UpdateBookRequestBody:
+    properties:
+      author:
+        type: string
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Book:
+    properties:
+      author:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: Gin Tryout
+  title: Gin Tryout
+  version: "1.0"
+paths:
+  /books:
+    get:
+      description: Retrieves an array of Books
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Book'
+            type: array
+      summary: Retrieves an array of Books
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      description: Takes a book JSON and store in DB. Return saved JSON.
+      parameters:
+      - description: AddBooksRequestBody JSON
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/books.AddBooksRequestBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Creates a new book
+      tags:
+      - books
+  /books/{id}:
+    delete:
+      description: Takes an ID and deletes the book by the ID
+      parameters:
+      - description: search by ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Delete a single Book
+      tags:
+      - books
+    get:
+      description: Takes an ID and retireves the book by the ID
+      parameters:
+      - description: search by ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Retrieves a single Book
+      tags:
+      - books
+    put:
+      description: Takes an ID and updates the book by the ID
+      parameters:
+      - description: search by ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UpdateBookRequestBody JSON
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/books.UpdateBookRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Updates a single Book
+      tags:
+      - books
+  /health:
+    get:
+      consumes:
+      - '*/*'
+      description: get the status of server.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Show the status of server.
+      tags:
+      - root
+swagger: "2.0"
